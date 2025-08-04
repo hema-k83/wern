@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AddWordsScreen extends StatefulWidget {
-  const AddWordsScreen({super.key});
+class MyListScreen extends StatefulWidget {
+  const MyListScreen({super.key});
 
   @override
-  State<AddWordsScreen> createState() => _AddWordsScreenState();
+  State<MyListScreen> createState() => _MyListScreenState();
 }
 
-class _AddWordsScreenState extends State<AddWordsScreen> {
+class _MyListScreenState extends State<MyListScreen> {
   String listName = "";
   List<String> words = [];
   final int maxWords = 30;
@@ -28,7 +28,7 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
   @override
   void initState() {
     super.initState();
-    readData().then((data) {
+    getSavedData().then((data) {
       if (data == true) {
         setState(() {
           nameController.text = listName;
@@ -37,7 +37,7 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
     });
   }
 
-  Future<bool> readData() async {
+  Future<bool> getSavedData() async {
     try {
       sharedPreferences = await SharedPreferences.getInstance();
       if (sharedPreferences.containsKey("listName")) {
@@ -72,8 +72,12 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
         foregroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          "Add Words",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          "My List",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
         //backgroundColor: Colors.blueAccent,
         elevation: 10,
@@ -85,10 +89,11 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
           spacing: 10,
           children: [
             Text(
-              "Category Name",
+              "List Name",
               style: TextStyle(
                 color: Colors.brown,
                 fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
             ),
             Form(
@@ -97,8 +102,8 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
                 controller: nameController,
                 decoration: InputDecoration(
                   hint: Text(
-                    "Enter Category Name (English)",
-                    style: TextStyle(color: Colors.grey),
+                    "Enter List Name",
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
                   ),
                   isDense: true,
                   border: OutlineInputBorder(
@@ -113,7 +118,7 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
                 maxLines: 1,
                 maxLength: 10,
                 cursorColor: Colors.black,
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.black, fontSize: 18),
                 validator: (data) {
                   if (data == null || data.trim().isEmpty) {
                     return "Enter valid name";
@@ -129,6 +134,7 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
               style: TextStyle(
                 color: Colors.brown,
                 fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
             ),
             Form(
@@ -138,7 +144,7 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
                 decoration: InputDecoration(
                   hint: Text(
                     "Enter Word (Telugu)",
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
                   ),
                   isDense: true,
                   border: OutlineInputBorder(
@@ -153,7 +159,7 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
                 maxLines: 1,
                 maxLength: 5,
                 cursorColor: Colors.black,
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.black, fontSize: 18),
                 validator: (data) {
                   if (data != null || data!.trim().isNotEmpty) {
                     RegExp exp = RegExp(
@@ -177,13 +183,23 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
                           if (!_nameForm.currentState!.validate() ||
                               !_wordForm.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Enter valid Data')),
+                              const SnackBar(
+                                content: Text(
+                                  'Enter valid Data',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
                             );
                           } else {
                             setState(() {
                               words.add(wordController.text.trim());
                               wordController.text = "";
                             });
+                            FocusNode().unfocus();
                           }
                         }
                       : null,
@@ -192,6 +208,7 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -209,7 +226,10 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
 
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    title: Text(words[index]),
+                    title: Text(
+                      words[index],
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
                     trailing: IconButton(
                       onPressed: () {
                         setState(() {
@@ -230,7 +250,13 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
                   onPressed: () async {
                     if (!_nameForm.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Enter valid Data')),
+                        const SnackBar(
+                          content: Text(
+                            'Enter valid Data',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
                       );
                     } else {
                       await saveData();
@@ -247,6 +273,7 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
                 ),

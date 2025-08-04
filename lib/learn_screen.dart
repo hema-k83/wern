@@ -35,7 +35,11 @@ class _LearnScreenState extends State<LearnScreen> {
         centerTitle: true,
         title: Text(
           widget.category,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
         foregroundColor: Colors.white,
       ),
@@ -59,6 +63,7 @@ class _LearnScreenState extends State<LearnScreen> {
                       shadowColor: Colors.grey.shade700,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
                             child: Center(

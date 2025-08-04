@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wern/add_words_screen.dart';
+import 'package:wern/my_list_screen.dart';
 import 'package:wern/custom_tts.dart';
 import 'package:wern/learn_screen.dart';
 import 'package:wern/show_instructions.dart';
@@ -48,10 +48,11 @@ class _HomePageState extends State<HomePage> {
       }
       return data;
     });
-    readData().then((data) {
+    getSavedWords().then((data) {
       setState(() {
         if (categories.length > initialCategories) {
-          categories.removeLast();
+          categories
+              .removeLast(); //User has created list before later modifies it, when we comeback to screen need to load updated data so need to remove previous data.
         }
         if (data.isNotEmpty) {
           categories.add(data);
@@ -60,7 +61,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<String> readData() async {
+  Future<String> getSavedWords() async {
     String name = "";
     try {
       sharedPreferences = await SharedPreferences.getInstance();
@@ -78,7 +79,6 @@ class _HomePageState extends State<HomePage> {
         }
       }
     } catch (e) {
-      //TODO
       return "";
     }
     return name;
@@ -92,10 +92,13 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color(0xFF222831),
         centerTitle: true,
         title: Text(
-          "Padhaalu",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          "Wern",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
-        //backgroundColor: Colors.blueAccent,
         elevation: 10,
       ),
       body: isLanguageSupported == null
@@ -103,9 +106,6 @@ class _HomePageState extends State<HomePage> {
           : FutureBuilder(
               future: isLanguageSupported,
               builder: (context, asyncSnapshot) {
-                // setState(() {
-
-                //});
                 if (asyncSnapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 } else if (asyncSnapshot.hasData) {
@@ -201,14 +201,17 @@ class _HomePageState extends State<HomePage> {
   void onAddWords() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddWordsScreen()),
+      MaterialPageRoute(builder: (context) => MyListScreen()),
     );
 
     if (result == 'change') {
       initCategories();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Data Saved", style: TextStyle(color: Colors.white)),
+          content: Text(
+            "Data Saved",
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
           backgroundColor: Colors.green,
           duration: Duration(milliseconds: 500),
         ),
