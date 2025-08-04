@@ -101,80 +101,73 @@ class _HomePageState extends State<HomePage> {
         ),
         elevation: 10,
       ),
-      body: isLanguageSupported == null
-          ? Center(child: CircularProgressIndicator())
-          : FutureBuilder(
-              future: isLanguageSupported,
-              builder: (context, asyncSnapshot) {
-                if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (asyncSnapshot.hasData) {
-                  return Visibility(
-                    visible: asyncSnapshot.data!,
-                    replacement: ShowInstrutions(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20,
-                        horizontal: 20,
-                      ),
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 30,
-                          mainAxisSpacing: 20,
+      body: FutureBuilder(
+        future: isLanguageSupported,
+        builder: (context, asyncSnapshot) {
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (asyncSnapshot.hasData) {
+            return Visibility(
+              visible: asyncSnapshot.data!,
+              replacement: ShowInstrutions(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 20,
+                ),
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 30,
+                    mainAxisSpacing: 20,
+                  ),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      child: Card(
+                        elevation: 8.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        itemCount: categories.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            child: Card(
-                              elevation: 8.0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              color: Color(0xFFDFD0B8),
-                              shadowColor: Colors.grey.shade700,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Image.asset(getImageName(index)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 20.0,
-                                    ),
-                                    child: Text(
-                                      categories[index],
-                                      style: TextStyle(
-                                        color: Colors.brown,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                        color: Color(0xFFDFD0B8),
+                        shadowColor: Colors.grey.shade700,
+                        child: Column(
+                          children: [
+                            Expanded(child: Image.asset(getImageName(index))),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 20.0),
+                              child: Text(
+                                categories[index],
+                                style: TextStyle(
+                                  color: Colors.brown,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder: (BuildContext context) =>
-                                      LearnScreen(
-                                        category: categories[index],
-                                        tts: tts,
-                                      ),
-                                ),
-                              );
-                            },
-                          );
-                        },
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  return ShowInstrutions();
-                }
-              },
-            ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => LearnScreen(
+                              category: categories[index],
+                              tts: tts,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            );
+          } else {
+            return ShowInstrutions();
+          }
+        },
+      ),
       floatingActionButton: Visibility(
         visible: canCreateList,
         child: FloatingActionButton(
