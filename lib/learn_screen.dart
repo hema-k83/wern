@@ -28,6 +28,7 @@ class _LearnScreenState extends State<LearnScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final categoryData = Data.getData(widget.category);
     return Scaffold(
       backgroundColor: Color(0xFFDFD0B8),
       appBar: AppBar(
@@ -51,9 +52,11 @@ class _LearnScreenState extends State<LearnScreen> {
             physics: isReading
                 ? NeverScrollableScrollPhysics()
                 : BouncingScrollPhysics(),
-            children: Data.getData(widget.category)
+            children: categoryData
+                .asMap()
+                .entries
                 .map<Widget>(
-                  (String word) => Padding(
+                  (MapEntry<int, String> wordEntry) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Card(
                       color: Colors.white,
@@ -65,11 +68,28 @@ class _LearnScreenState extends State<LearnScreen> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 20,
+                                top: 15,
+                              ),
+                              child: Text(
+                                "${wordEntry.key + 1} of ${categoryData.length}",
+                                style: TextStyle(
+                                  color: Colors.brown,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
                           Expanded(
                             child: Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: word.characters
+                                children: wordEntry.value.characters
                                     .toList()
                                     .asMap()
                                     .entries
@@ -104,7 +124,8 @@ class _LearnScreenState extends State<LearnScreen> {
                                   });
                                   if (isReading) {
                                     readingIndex = 0;
-                                    var chars = word.characters.toList();
+                                    var chars = wordEntry.value.characters
+                                        .toList();
                                     for (
                                       readingIndex = 0;
                                       readingIndex < chars.length;
@@ -128,7 +149,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                     }
                                     if (isReading)
                                       await widget.tts.speak(
-                                        word,
+                                        wordEntry.value,
                                       ); //Reading entire word here
                                     setState(() {
                                       isReading = false;
