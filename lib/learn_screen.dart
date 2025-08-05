@@ -99,7 +99,6 @@ class _LearnScreenState extends State<LearnScreen> {
                               alignment: Alignment.bottomCenter,
                               child: IconButton(
                                 onPressed: () async {
-                                  print("Clicked");
                                   setState(() {
                                     isReading = !isReading;
                                   });
@@ -112,33 +111,42 @@ class _LearnScreenState extends State<LearnScreen> {
                                       readingIndex++
                                     ) {
                                       if (!isReading) break;
+                                      setState(
+                                        //Don't delete
+                                        () {},
+                                      ); //Need these for Characters to scale up/down in sequence properly
                                       await widget.tts.speak(
                                         chars[readingIndex],
                                       );
                                       await Future.delayed(
                                         Duration(milliseconds: 20),
                                       );
+                                      setState(
+                                        //Don't delete
+                                        () {},
+                                      ); //Need these for last Character to scale down in sequence properly
                                     }
-                                    if (isReading) await widget.tts.speak(word);
+                                    if (isReading)
+                                      await widget.tts.speak(
+                                        word,
+                                      ); //Reading entire word here
                                     setState(() {
                                       isReading = false;
                                       readingIndex = -1;
                                     });
                                   } else {
-                                    readingIndex = -1;
+                                    setState(() {
+                                      readingIndex = -1;
+                                    });
                                   }
                                 },
-                                icon: isReading
-                                    ? Icon(
-                                        Icons.stop,
-                                        color: Colors.red,
-                                        size: 60,
-                                      )
-                                    : Icon(
-                                        Icons.play_arrow,
-                                        color: Color(0xFF06923E),
-                                        size: 60,
-                                      ),
+                                icon: Icon(
+                                  isReading ? Icons.stop : Icons.play_arrow,
+                                  color: isReading
+                                      ? Colors.red
+                                      : Color(0xFF06923E),
+                                  size: 60,
+                                ),
                               ),
                             ),
                           ),
