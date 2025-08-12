@@ -13,7 +13,7 @@ class MyListScreen extends StatefulWidget {
 class _MyListScreenState extends State<MyListScreen> {
   String listName = "";
   List<String> words = [];
-  final int maxWords = 30;
+  final int maxWords = 3;
   late SharedPreferences sharedPreferences;
   TextEditingController nameController = TextEditingController();
   TextEditingController wordController = TextEditingController();
@@ -200,6 +200,20 @@ class _MyListScreenState extends State<MyListScreen> {
                               words.add(wordController.text.trim());
                               wordController.text = "";
                             });
+                            if (words.length == maxWords) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'You have reached maximum number of words limit',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.black,
+                                ),
+                              );
+                            }
                           }
                         }
                       : null,
