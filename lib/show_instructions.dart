@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ShowInstrutions extends StatelessWidget {
-  const ShowInstrutions({super.key});
-
+  ShowInstrutions({super.key, required this.language});
+  String language;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -11,14 +11,18 @@ class ShowInstrutions extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         spacing: 10,
         children: [
-          Text(
-            "Required settings are missing please follow below steps and relaunch the app",
-            softWrap: true,
-            maxLines: 5,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
-              fontSize: 20,
+          Container(
+            padding: EdgeInsets.all(10),
+            color: Colors.red,
+            child: Text(
+              "Required settings are missing please follow below steps and relaunch the app",
+              softWrap: true,
+              maxLines: 5,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 20,
+              ),
             ),
           ),
           Text(
@@ -32,7 +36,7 @@ class ShowInstrutions extends StatelessWidget {
             ),
           ),
           Text(
-            "Go to Google TTS settings > Install voice data > Telugu",
+            "Go to Google TTS settings > Install voice data > ${language}",
             softWrap: true,
             maxLines: 5,
             style: TextStyle(

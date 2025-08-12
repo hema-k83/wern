@@ -9,6 +9,10 @@ class CustomTTS {
 
   CustomTTS({required this.language});
 
+  void setLanguage(String language) {
+    this.language = language;
+  }
+
   Future<bool> initTTS() async {
     flutterTts = FlutterTts();
     _setAwaitOptions();

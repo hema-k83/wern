@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wern/home_page.dart';
+
+import 'app_variables.dart';
 
 class MyListScreen extends StatefulWidget {
   const MyListScreen({super.key});
@@ -13,7 +16,7 @@ class MyListScreen extends StatefulWidget {
 class _MyListScreenState extends State<MyListScreen> {
   String listName = "";
   List<String> words = [];
-  final int maxWords = 3;
+  final int maxWords = 30;
   late SharedPreferences sharedPreferences;
   TextEditingController nameController = TextEditingController();
   TextEditingController wordController = TextEditingController();
@@ -40,11 +43,15 @@ class _MyListScreenState extends State<MyListScreen> {
   Future<bool> getSavedData() async {
     try {
       sharedPreferences = await SharedPreferences.getInstance();
-      if (sharedPreferences.containsKey("listName")) {
-        listName = sharedPreferences.getString("listName") ?? "";
+      if (sharedPreferences.containsKey("listName_${AppVariables.Language}")) {
+        listName =
+            sharedPreferences.getString("listName_${AppVariables.Language}") ??
+            "";
       }
-      if (sharedPreferences.containsKey("words")) {
-        words = sharedPreferences.getStringList("words") ?? [];
+      if (sharedPreferences.containsKey("words_${AppVariables.Language}")) {
+        words =
+            sharedPreferences.getStringList("words_${AppVariables.Language}") ??
+            [];
       }
       return true;
     } catch (e) {
@@ -55,8 +62,14 @@ class _MyListScreenState extends State<MyListScreen> {
 
   Future<void> saveData() async {
     try {
-      await sharedPreferences.setString("listName", nameController.text);
-      await sharedPreferences.setStringList("words", words);
+      await sharedPreferences.setString(
+        "listName_${AppVariables.Language}",
+        nameController.text,
+      );
+      await sharedPreferences.setStringList(
+        "words_${AppVariables.Language}",
+        words,
+      );
     } catch (e) {
       //TODO
     }
@@ -64,6 +77,7 @@ class _MyListScreenState extends State<MyListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String langRegex = getLanguageRegex();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFDFD0B8),
@@ -143,7 +157,7 @@ class _MyListScreenState extends State<MyListScreen> {
                 controller: wordController,
                 decoration: InputDecoration(
                   hint: Text(
-                    "Enter Word (Telugu)",
+                    "Enter Word (${getLanguageVal()})",
                     style: TextStyle(color: Colors.grey, fontSize: 18),
                   ),
                   isDense: true,
@@ -162,9 +176,7 @@ class _MyListScreenState extends State<MyListScreen> {
                 style: TextStyle(color: Colors.black, fontSize: 18),
                 validator: (data) {
                   if (data != null || data!.trim().isNotEmpty) {
-                    RegExp exp = RegExp(
-                      r'^(?=.*[\u0C00-\u0C7F])[\u0C00-\u0C7F\u0020]+$',
-                    );
+                    RegExp exp = RegExp(langRegex);
                     if (exp.hasMatch(data)) {
                       return null;
                     }
@@ -297,5 +309,27 @@ class _MyListScreenState extends State<MyListScreen> {
         ),
       ),
     );
+  }
+
+  String getLanguageRegex() {
+    switch (AppVariables.Language) {
+      case "en":
+        return r'^[A-Za-z]+$';
+      case "te":
+        return r'^(?=.*[\u0C00-\u0C7F])[\u0C00-\u0C7F\u0020]+$';
+      default:
+        return r'^[A-Za-z]+$';
+    }
+  }
+
+  String getLanguageVal() {
+    switch (AppVariables.Language) {
+      case "en":
+        return "English";
+      case "te":
+        return "Telugu";
+      default:
+        return "Eglish";
+    }
   }
 }

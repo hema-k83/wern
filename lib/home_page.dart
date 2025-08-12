@@ -5,10 +5,11 @@ import 'package:wern/learn_screen.dart';
 import 'package:wern/show_instructions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'app_variables.dart';
 import 'data.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    tts = CustomTTS(language: "te-IN");
+    tts = CustomTTS(language: "${AppVariables.Language}-IN");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initCategories();
     });
@@ -65,18 +66,35 @@ class _HomePageState extends State<HomePage> {
     String name = "";
     try {
       sharedPreferences = await SharedPreferences.getInstance();
-      if (sharedPreferences.containsKey("listName")) {
-        name = sharedPreferences.getString("listName") ?? "";
+      AppVariables.Language = sharedPreferences.getString("language") ?? "en";
+      if (sharedPreferences.containsKey("listName_${AppVariables.Language}")) {
+        name =
+            sharedPreferences.getString("listName_${AppVariables.Language}") ??
+            "";
       }
-      if (sharedPreferences.containsKey("words")) {
-        List<String> words = sharedPreferences.getStringList("words") ?? [];
+      if (sharedPreferences.containsKey("words_${AppVariables.Language}")) {
+        List<String> words =
+            sharedPreferences.getStringList("words_${AppVariables.Language}") ??
+            [];
         if (words.isEmpty) {
           name = "";
-          Data.myList.removeRange(0, Data.myList.length);
+          Data.myList[AppVariables.Language]?.removeRange(
+            0,
+            Data.myList[AppVariables.Language]!.length,
+          );
         } else {
-          Data.myList.removeRange(0, Data.myList.length);
-          Data.myList.addAll(words);
+          Data.myList[AppVariables.Language]?.removeRange(
+            0,
+            Data.myList[AppVariables.Language]!.length,
+          );
+          Data.myList[AppVariables.Language]?.addAll(words);
         }
+      } else {
+        name = "";
+        Data.myList[AppVariables.Language]?.removeRange(
+          0,
+          Data.myList[AppVariables.Language]!.length,
+        );
       }
     } catch (e) {
       return "";
@@ -100,6 +118,77 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         elevation: 10,
+
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 5.0),
+            child: PopupMenuButton<String>(
+              onSelected: (val) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext contxt) {
+                    return AlertDialog(content: CircularProgressIndicator());
+                  },
+                );
+
+                AppVariables.Language = val;
+                sharedPreferences.setString("language", val);
+                tts.setLanguage(AppVariables.Language);
+                initCategories();
+                setState(() {});
+                Navigator.of(context).pop();
+              },
+              color: Color(0xFF222831),
+              offset: Offset(0, 40),
+              icon: Icon(Icons.settings, color: Colors.white, size: 30),
+              itemBuilder: (context) => [
+                PopupMenuItem<String>(
+                  value: "en",
+                  child: ListTile(
+                    title: Text(
+                      "English",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    trailing: Visibility(
+                      visible: AppVariables.Language == "en",
+                      child: const Icon(
+                        Icons.check,
+                        size: 20,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                ),
+                PopupMenuDivider(color: Colors.white54),
+                PopupMenuItem<String>(
+                  value: "te",
+                  child: ListTile(
+                    title: Text(
+                      "Telugu",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    trailing: Visibility(
+                      visible: AppVariables.Language == "te",
+                      child: const Icon(
+                        Icons.check,
+                        size: 20,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: isLanguageSupported,
@@ -109,7 +198,9 @@ class _HomePageState extends State<HomePage> {
           } else if (asyncSnapshot.hasData) {
             return Visibility(
               visible: asyncSnapshot.data!,
-              replacement: ShowInstrutions(),
+              replacement: ShowInstrutions(
+                language: getLanguage(AppVariables.Language),
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 20,
@@ -164,7 +255,9 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else {
-            return ShowInstrutions();
+            return ShowInstrutions(
+              language: getLanguage(AppVariables.Language),
+            );
           }
         },
       ),
@@ -209,6 +302,28 @@ class _HomePageState extends State<HomePage> {
           duration: Duration(milliseconds: 500),
         ),
       );
+    }
+  }
+
+  String getLanguageCode(String val) {
+    switch (val) {
+      case "English":
+        return "en";
+      case "Telugu":
+        return "te";
+      default:
+        return "en";
+    }
+  }
+
+  String getLanguage(String val) {
+    switch (val) {
+      case "en":
+        return "English";
+      case "te":
+        return "Telugu";
+      default:
+        return "English";
     }
   }
 }

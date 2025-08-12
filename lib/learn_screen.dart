@@ -17,7 +17,6 @@ class LearnScreen extends StatefulWidget {
 
 class _LearnScreenState extends State<LearnScreen> {
   bool isReading = false;
-  bool isLangauageSupported = false;
   int readingIndex = -1;
 
   @override
