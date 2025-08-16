@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -33,7 +36,10 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -46,31 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCPj4Eyr7RXpqNBXQOCpj_URn5nBJwOn9o',
-    appId: '1:335218135764:web:938dd2455e583a47ebe141',
-    messagingSenderId: '335218135764',
-    projectId: 'wern-d6bf8',
-    authDomain: 'wern-d6bf8.firebaseapp.com',
-    storageBucket: 'wern-d6bf8.firebasestorage.app',
-    measurementId: 'G-Z57QXMLNJH',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAqKM9dWuvYMEgxdTYnpz-5Weyqtw31nZ8',
-    appId: '1:335218135764:android:bfda9e660075f0b0ebe141',
-    messagingSenderId: '335218135764',
-    projectId: 'wern-d6bf8',
-    storageBucket: 'wern-d6bf8.firebasestorage.app',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCPj4Eyr7RXpqNBXQOCpj_URn5nBJwOn9o',
-    appId: '1:335218135764:web:4ae355a0d71ae4d0ebe141',
-    messagingSenderId: '335218135764',
-    projectId: 'wern-d6bf8',
-    authDomain: 'wern-d6bf8.firebaseapp.com',
-    storageBucket: 'wern-d6bf8.firebasestorage.app',
-    measurementId: 'G-3TMHDSPGB3',
+    apiKey: 'AIzaSyDnS4UcZ__U6bXWUEXtk_xYR46Ms_MNdTg',
+    appId: '1:842912118045:android:539a0f02a3d4b9e498ddf4',
+    messagingSenderId: '842912118045',
+    projectId: 'wern-53a15',
+    storageBucket: 'wern-53a15.firebasestorage.app',
   );
 }
