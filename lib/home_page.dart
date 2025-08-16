@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wern/analytics.dart';
 import 'package:wern/my_list_screen.dart';
 import 'package:wern/custom_tts.dart';
 import 'package:wern/learn_screen.dart';
@@ -37,6 +38,7 @@ class _HomePageState extends State<HomePage> {
     tts = CustomTTS(language: "${AppVariables.Language}-IN");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initCategories();
+      Analytics.logPageView("home_page", "HomePage");
     });
   }
 
@@ -49,11 +51,15 @@ class _HomePageState extends State<HomePage> {
       }
       return data;
     });
+    getCategoriesData();
+  }
+
+  void getCategoriesData() {
     getSavedWords().then((data) {
       setState(() {
         if (categories.length > initialCategories) {
           categories
-              .removeLast(); //User has created list before later modifies it, when we comeback to screen need to load updated data so need to remove previous data.
+              .removeLast(); //User modifies previously created list, when we comeback to screen need to load updated data so need to remove previous data.
         }
         if (data.isNotEmpty) {
           categories.add(data);
@@ -62,39 +68,34 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  getCategoryNameDetails() {
+    if (sharedPreferences.containsKey("listName_${AppVariables.Language}")) {
+      return sharedPreferences.getString("listName_${AppVariables.Language}") ??
+          "";
+    }
+  }
+
   Future<String> getSavedWords() async {
     String name = "";
     try {
       sharedPreferences = await SharedPreferences.getInstance();
       AppVariables.Language = sharedPreferences.getString("language") ?? "en";
-      if (sharedPreferences.containsKey("listName_${AppVariables.Language}")) {
-        name =
-            sharedPreferences.getString("listName_${AppVariables.Language}") ??
-            "";
-      }
+      name = getCategoryNameDetails();
+      Data.myList[AppVariables.Language]?.removeRange(
+        0,
+        Data.myList[AppVariables.Language]!.length,
+      );
       if (sharedPreferences.containsKey("words_${AppVariables.Language}")) {
         List<String> words =
             sharedPreferences.getStringList("words_${AppVariables.Language}") ??
             [];
         if (words.isEmpty) {
           name = "";
-          Data.myList[AppVariables.Language]?.removeRange(
-            0,
-            Data.myList[AppVariables.Language]!.length,
-          );
         } else {
-          Data.myList[AppVariables.Language]?.removeRange(
-            0,
-            Data.myList[AppVariables.Language]!.length,
-          );
           Data.myList[AppVariables.Language]?.addAll(words);
         }
       } else {
         name = "";
-        Data.myList[AppVariables.Language]?.removeRange(
-          0,
-          Data.myList[AppVariables.Language]!.length,
-        );
       }
     } catch (e) {
       return "";
@@ -109,13 +110,29 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Color(0xFF222831),
         centerTitle: true,
-        title: Text(
-          "Wern",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+
+        title: Column(
+          children: [
+            Text(
+              "Wern",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                "A Word Learning App",
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          ],
         ),
         elevation: 10,
 
@@ -132,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                 );
 
                 AppVariables.Language = val;
-                sharedPreferences.setString("language", val);
+                sharedPreferences.setString("language", AppVariables.Language);
                 tts.setLanguage(AppVariables.Language);
                 initCategories();
                 setState(() {});

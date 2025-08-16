@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'analytics.dart';
+
 class ShowInstrutions extends StatelessWidget {
   ShowInstrutions({super.key, required this.language});
   String language;
   @override
   Widget build(BuildContext context) {
+    Analytics.logPageView("instructions_screen", "No Support");
     return Container(
       padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
       child: Column(
@@ -25,8 +28,9 @@ class ShowInstrutions extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 20),
           Text(
-            "Go to Settings > General Management > Text-to-Speech Output > Preferred engine → Google Text-to-Speech",
+            "1. Go to Settings > General Management > Text-to-Speech Output > Preferred engine → Google Text-to-Speech",
             softWrap: true,
             maxLines: 5,
             style: TextStyle(
@@ -35,8 +39,9 @@ class ShowInstrutions extends StatelessWidget {
               fontSize: 20,
             ),
           ),
+          SizedBox(height: 20),
           Text(
-            "Go to Google TTS settings > Install voice data > ${language}",
+            "2. Go to Google TTS settings > Install voice data > ${language}",
             softWrap: true,
             maxLines: 5,
             style: TextStyle(

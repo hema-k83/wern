@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:characters/characters.dart';
+import 'package:wern/analytics.dart';
 import 'package:wern/custom_tts.dart';
 
 import 'data.dart';
@@ -18,6 +19,12 @@ class LearnScreen extends StatefulWidget {
 class _LearnScreenState extends State<LearnScreen> {
   bool isReading = false;
   int readingIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    Analytics.logPageView("learning_screen", widget.category);
+  }
 
   @override
   void dispose() {

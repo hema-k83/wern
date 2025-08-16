@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wern/home_page.dart';
 
+import 'analytics.dart';
 import 'app_variables.dart';
 
 class MyListScreen extends StatefulWidget {
@@ -31,6 +31,7 @@ class _MyListScreenState extends State<MyListScreen> {
   @override
   void initState() {
     super.initState();
+    Analytics.logPageView("mylist_screen", "MyListScreen");
     getSavedData().then((data) {
       if (data == true) {
         setState(() {
