@@ -210,7 +210,7 @@ class _MyListScreenState extends State<MyListScreen> {
                           } else {
                             FocusScope.of(context).unfocus();
                             setState(() {
-                              words.add(wordController.text.trim());
+                              words.insert(0, wordController.text.trim());
                               wordController.text = "";
                             });
                             if (words.length == maxWords) {
