@@ -5,13 +5,9 @@ import 'package:flutter_tts/flutter_tts.dart';
 
 class CustomTTS {
   late FlutterTts flutterTts;
-  String language;
+  String language = "en";
 
-  CustomTTS({required this.language});
-
-  void setLanguage(String language) {
-    this.language = language;
-  }
+  CustomTTS();
 
   Future<bool> initTTS() async {
     flutterTts = FlutterTts();
@@ -20,9 +16,7 @@ class CustomTTS {
       //isAndroid check {
       var engine = await _getDefaultEngine();
       var voice = await _getDefaultVoice();
-      flutterTts.setErrorHandler((msg) {
-        print("TTS error: $msg");
-      });
+      flutterTts.setErrorHandler((msg) {});
       if (voice && engine) {
         bool isLanguageAvailable = await flutterTts.isLanguageAvailable(
           language,
@@ -39,7 +33,6 @@ class CustomTTS {
   Future<bool> _getDefaultEngine() async {
     var engine = await flutterTts.getDefaultEngine;
     if (engine != null) {
-      print(engine);
       return true;
     }
     return false;

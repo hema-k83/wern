@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:characters/characters.dart';
 import 'package:wern/analytics.dart';
 import 'package:wern/custom_tts.dart';
 
@@ -36,9 +35,9 @@ class _LearnScreenState extends State<LearnScreen> {
   Widget build(BuildContext context) {
     final categoryData = Data.getData(widget.category);
     return Scaffold(
-      backgroundColor: Color(0xFFDFD0B8),
+      backgroundColor: Color(0xFFBBDCE5),
       appBar: AppBar(
-        backgroundColor: Color(0xFF222831),
+        backgroundColor: Color(0xFF065084),
         centerTitle: true,
         title: Text(
           widget.category,
@@ -65,7 +64,7 @@ class _LearnScreenState extends State<LearnScreen> {
                   (MapEntry<int, String> wordEntry) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Card(
-                      color: Colors.white,
+                      color: Color(0xFFF8FAFB),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -153,10 +152,9 @@ class _LearnScreenState extends State<LearnScreen> {
                                         () {},
                                       ); //Need these for last Character to scale down in sequence properly
                                     }
-                                    if (isReading)
-                                      await widget.tts.speak(
-                                        wordEntry.value,
-                                      ); //Reading entire word here
+                                    if (isReading) {
+                                      await widget.tts.speak(wordEntry.value);
+                                    } //Reading entire word here
                                     setState(() {
                                       isReading = false;
                                       readingIndex = -1;

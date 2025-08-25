@@ -101,8 +101,10 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 flutter_native_splash:
-  color: "#DFD0B8"
+  color: "#BBDCE5"
   image: images/launcher.png
+  android_gravity: center
   android_12:
-    color: "#DFD0B8"
+    color: "#BBDCE5"
     image: images/launcher.png
+    android_gravity: center

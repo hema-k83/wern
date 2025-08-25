@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'analytics.dart';
 
-class ShowInstrutions extends StatelessWidget {
-  ShowInstrutions({super.key, required this.language});
-  String language;
+class ShowInstructions extends StatelessWidget {
+  const ShowInstructions({super.key});
+
   @override
   Widget build(BuildContext context) {
     Analytics.logPageView("instructions_screen", "No Support");
@@ -41,7 +41,7 @@ class ShowInstrutions extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Text(
-            "2. Go to Google TTS settings > Install voice data > ${language}",
+            "2. Go to Google TTS settings > Install voice data > English",
             softWrap: true,
             maxLines: 5,
             style: TextStyle(

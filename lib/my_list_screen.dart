@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'analytics.dart';
-import 'app_variables.dart';
 
 class MyListScreen extends StatefulWidget {
   const MyListScreen({super.key});
@@ -44,15 +43,11 @@ class _MyListScreenState extends State<MyListScreen> {
   Future<bool> getSavedData() async {
     try {
       sharedPreferences = await SharedPreferences.getInstance();
-      if (sharedPreferences.containsKey("listName_${AppVariables.Language}")) {
-        listName =
-            sharedPreferences.getString("listName_${AppVariables.Language}") ??
-            "";
+      if (sharedPreferences.containsKey("listName}")) {
+        listName = sharedPreferences.getString("listName") ?? "";
       }
-      if (sharedPreferences.containsKey("words_${AppVariables.Language}")) {
-        words =
-            sharedPreferences.getStringList("words_${AppVariables.Language}") ??
-            [];
+      if (sharedPreferences.containsKey("words")) {
+        words = sharedPreferences.getStringList("words") ?? [];
       }
       return true;
     } catch (e) {
@@ -63,14 +58,8 @@ class _MyListScreenState extends State<MyListScreen> {
 
   Future<void> saveData() async {
     try {
-      await sharedPreferences.setString(
-        "listName_${AppVariables.Language}",
-        nameController.text,
-      );
-      await sharedPreferences.setStringList(
-        "words_${AppVariables.Language}",
-        words,
-      );
+      await sharedPreferences.setString("listName", nameController.text);
+      await sharedPreferences.setStringList("words", words);
     } catch (e) {
       //TODO
     }
@@ -81,9 +70,9 @@ class _MyListScreenState extends State<MyListScreen> {
     String langRegex = getLanguageRegex();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xFFDFD0B8),
+      backgroundColor: Color(0xFFF8FAFB),
       appBar: AppBar(
-        backgroundColor: Color(0xFF222831),
+        backgroundColor: Color(0xFF065084),
         foregroundColor: Colors.white,
         centerTitle: true,
         title: Text(
@@ -158,7 +147,7 @@ class _MyListScreenState extends State<MyListScreen> {
                 controller: wordController,
                 decoration: InputDecoration(
                   hint: Text(
-                    "Enter Word (${getLanguageVal()})",
+                    "Enter Word in English",
                     style: TextStyle(color: Colors.grey, fontSize: 18),
                   ),
                   isDense: true,
@@ -313,24 +302,6 @@ class _MyListScreenState extends State<MyListScreen> {
   }
 
   String getLanguageRegex() {
-    switch (AppVariables.Language) {
-      case "en":
-        return r'^[A-Za-z]+$';
-      case "te":
-        return r'^(?=.*[\u0C00-\u0C7F])[\u0C00-\u0C7F\u0020]+$';
-      default:
-        return r'^[A-Za-z]+$';
-    }
-  }
-
-  String getLanguageVal() {
-    switch (AppVariables.Language) {
-      case "en":
-        return "English";
-      case "te":
-        return "Telugu";
-      default:
-        return "Eglish";
-    }
+    return r'^[A-Za-z]+$';
   }
 }

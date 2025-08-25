@@ -6,7 +6,6 @@ import 'package:wern/learn_screen.dart';
 import 'package:wern/show_instructions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'app_variables.dart';
 import 'data.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   Future<bool>? isLanguageSupported;
   late CustomTTS tts;
   bool canCreateList = false;
+
   final List<String> categories = [
     "General",
     "Fruits",
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    tts = CustomTTS(language: "${AppVariables.Language}-IN");
+    tts = CustomTTS();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initCategories();
       Analytics.logPageView("home_page", "HomePage");
@@ -69,9 +69,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   getCategoryNameDetails() {
-    if (sharedPreferences.containsKey("listName_${AppVariables.Language}")) {
-      return sharedPreferences.getString("listName_${AppVariables.Language}") ??
-          "";
+    if (sharedPreferences.containsKey("listName")) {
+      return sharedPreferences.getString("listName") ?? "";
     }
   }
 
@@ -79,20 +78,14 @@ class _HomePageState extends State<HomePage> {
     String name = "";
     try {
       sharedPreferences = await SharedPreferences.getInstance();
-      AppVariables.Language = sharedPreferences.getString("language") ?? "en";
       name = getCategoryNameDetails();
-      Data.myList[AppVariables.Language]?.removeRange(
-        0,
-        Data.myList[AppVariables.Language]!.length,
-      );
-      if (sharedPreferences.containsKey("words_${AppVariables.Language}")) {
-        List<String> words =
-            sharedPreferences.getStringList("words_${AppVariables.Language}") ??
-            [];
+      Data.myList.removeRange(0, Data.myList.length);
+      if (sharedPreferences.containsKey("words")) {
+        List<String> words = sharedPreferences.getStringList("words") ?? [];
         if (words.isEmpty) {
           name = "";
         } else {
-          Data.myList[AppVariables.Language]?.addAll(words);
+          Data.myList.addAll(words);
         }
       } else {
         name = "";
@@ -105,12 +98,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    int primary = 0xFF065084; //Appbar A7d8ff
+    int primaryVariant = 0xFFBBDCE5;
+    int secondary = 0xFFF8FAFB;
+    int secondaryVariant = 0xFFEF4444;
     return Scaffold(
-      backgroundColor: Color(0xFF948979),
+      backgroundColor: Color(primaryVariant),
       appBar: AppBar(
-        backgroundColor: Color(0xFF222831),
+        backgroundColor: Color(primary),
+        shadowColor: Colors.grey.shade50,
         centerTitle: true,
-
+        elevation: 30,
         title: Column(
           children: [
             Text(
@@ -134,78 +132,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        elevation: 10,
-
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 5.0),
-            child: PopupMenuButton<String>(
-              onSelected: (val) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext contxt) {
-                    return AlertDialog(content: CircularProgressIndicator());
-                  },
-                );
-
-                AppVariables.Language = val;
-                sharedPreferences.setString("language", AppVariables.Language);
-                tts.setLanguage(AppVariables.Language);
-                initCategories();
-                setState(() {});
-                Navigator.of(context).pop();
-              },
-              color: Color(0xFF222831),
-              offset: Offset(0, 40),
-              icon: Icon(Icons.settings, color: Colors.white, size: 30),
-              itemBuilder: (context) => [
-                PopupMenuItem<String>(
-                  value: "en",
-                  child: ListTile(
-                    title: Text(
-                      "English",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    trailing: Visibility(
-                      visible: AppVariables.Language == "en",
-                      child: const Icon(
-                        Icons.check,
-                        size: 20,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                ),
-                PopupMenuDivider(color: Colors.white54),
-                PopupMenuItem<String>(
-                  value: "te",
-                  child: ListTile(
-                    title: Text(
-                      "Telugu",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    trailing: Visibility(
-                      visible: AppVariables.Language == "te",
-                      child: const Icon(
-                        Icons.check,
-                        size: 20,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
       body: FutureBuilder(
         future: isLanguageSupported,
@@ -215,9 +141,7 @@ class _HomePageState extends State<HomePage> {
           } else if (asyncSnapshot.hasData) {
             return Visibility(
               visible: asyncSnapshot.data!,
-              replacement: ShowInstrutions(
-                language: getLanguage(AppVariables.Language),
-              ),
+              replacement: ShowInstructions(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 20,
@@ -237,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        color: Color(0xFFDFD0B8),
+                        color: Color(secondary),
                         shadowColor: Colors.grey.shade700,
                         child: Column(
                           children: [
@@ -247,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                               child: Text(
                                 categories[index],
                                 style: TextStyle(
-                                  color: Colors.brown,
+                                  color: Color(0xFF111827),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                 ),
@@ -272,9 +196,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else {
-            return ShowInstrutions(
-              language: getLanguage(AppVariables.Language),
-            );
+            return ShowInstructions();
           }
         },
       ),
@@ -284,7 +206,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             onAddWords();
           },
-          backgroundColor: Color(0xFFD96F32),
+          backgroundColor: Color(secondaryVariant),
           child: const Icon(Icons.create_rounded, color: Colors.white),
         ),
       ),
@@ -319,28 +241,6 @@ class _HomePageState extends State<HomePage> {
           duration: Duration(milliseconds: 500),
         ),
       );
-    }
-  }
-
-  String getLanguageCode(String val) {
-    switch (val) {
-      case "English":
-        return "en";
-      case "Telugu":
-        return "te";
-      default:
-        return "en";
-    }
-  }
-
-  String getLanguage(String val) {
-    switch (val) {
-      case "en":
-        return "English";
-      case "te":
-        return "Telugu";
-      default:
-        return "English";
     }
   }
 }
