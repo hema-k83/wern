@@ -52,7 +52,7 @@ class _LearnScreenState extends State<LearnScreen> {
       body: Align(
         alignment: Alignment.center,
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.4,
+          height: MediaQuery.of(context).size.height * 0.45,
           child: PageView(
             physics: isReading
                 ? NeverScrollableScrollPhysics()
@@ -107,9 +107,11 @@ class _LearnScreenState extends State<LearnScreen> {
                                           color: readingIndex == index
                                               ? Colors.red
                                               : Color(0xFF1A237E),
-                                          fontSize: readingIndex == index
-                                              ? 70
-                                              : 50,
+                                          fontSize:
+                                              (readingIndex == index
+                                                  ? 0.14
+                                                  : 0.12) *
+                                              MediaQuery.of(context).size.width,
                                           letterSpacing: 7.0,
                                         ),
                                       );

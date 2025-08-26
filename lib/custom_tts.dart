@@ -23,6 +23,7 @@ class CustomTTS {
         );
         if (isLanguageAvailable) {
           flutterTts.setLanguage(language);
+          flutterTts.setSpeechRate(0.2);
           return true;
         }
       }
