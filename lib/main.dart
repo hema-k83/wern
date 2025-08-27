@@ -3,12 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'home_page.dart';
+import 'home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp, // Allow portrait up
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown, // Allow portrait up
   ]).then((_) async {
     await Firebase.initializeApp();
     runApp(const WernApp()); // Your main application widget
@@ -28,7 +29,7 @@ class WernApp extends StatelessWidget {
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics), // track navigation
       ],
-      home: HomePage(),
+      home: HomeScreen(),
     );
   }
 }

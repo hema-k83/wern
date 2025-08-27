@@ -8,14 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   Future<bool>? isLanguageSupported;
   late CustomTTS tts;
   bool canCreateList = false;
@@ -31,6 +31,10 @@ class _HomePageState extends State<HomePage> {
   ];
   final int initialCategories = 7;
   late SharedPreferences sharedPreferences;
+  int primary = 0xFF065084; //Appbar A7d8ff
+  int primaryVariant = 0xFFBBDCE5;
+  int secondary = 0xFFF8FAFB;
+  int secondaryVariant = 0xFFEF4444;
 
   @override
   void initState() {
@@ -96,12 +100,20 @@ class _HomePageState extends State<HomePage> {
     return name;
   }
 
+  getColumnCount(width) {
+    if (width < 600) {
+      return 2; // small phones
+    } else if (width < 900) {
+      return 3; // landscape phones / small tablets
+    } else {
+      return 4; // big tablets / desktops
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    int primary = 0xFF065084; //Appbar A7d8ff
-    int primaryVariant = 0xFFBBDCE5;
-    int secondary = 0xFFF8FAFB;
-    int secondaryVariant = 0xFFEF4444;
+    double width = MediaQuery.of(context).size.width;
+    int crossAxisCount = getColumnCount(width);
     return Scaffold(
       backgroundColor: Color(primaryVariant),
       appBar: AppBar(
@@ -149,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                    crossAxisCount: crossAxisCount,
                     crossAxisSpacing: 30,
                     mainAxisSpacing: 20,
                   ),

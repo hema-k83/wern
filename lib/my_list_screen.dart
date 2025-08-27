@@ -161,7 +161,7 @@ class _MyListScreenState extends State<MyListScreen> {
                   ),
                 ),
                 maxLines: 1,
-                maxLength: 5,
+                maxLength: 7,
                 cursorColor: Colors.black,
                 style: TextStyle(color: Colors.black, fontSize: 18),
                 validator: (data) {
