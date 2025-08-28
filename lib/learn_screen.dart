@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wern/analytics.dart';
 import 'package:wern/custom_tts.dart';
 
+import 'ad_helper.dart';
 import 'data.dart';
 
 class LearnScreen extends StatefulWidget {
@@ -18,17 +20,30 @@ class LearnScreen extends StatefulWidget {
 class _LearnScreenState extends State<LearnScreen> {
   bool isReading = false;
   int readingIndex = -1;
+  BannerAd? _ad;
 
   @override
   void initState() {
     super.initState();
     Analytics.logPageView("learning_screen", widget.category);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.tts.stop();
+    // TODO: Load a banner ad
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _ad = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    ).load();
   }
 
   getTextSize(shortestSide) {
@@ -73,7 +88,7 @@ class _LearnScreenState extends State<LearnScreen> {
         alignment: Alignment.center,
         child: SizedBox(
           height: height * 0.45,
-          width: width * 0.8,
+          width: width * 0.9,
           child: PageView(
             physics: isReading
                 ? NeverScrollableScrollPhysics()
@@ -195,6 +210,25 @@ class _LearnScreenState extends State<LearnScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: Visibility(
+        visible: (_ad != null),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 40.0),
+          child: Container(
+            width: _ad?.size.width.toDouble() ?? 0,
+            height: 72.0,
+            alignment: Alignment.center,
+            child: _ad == null ? const SizedBox() : AdWidget(ad: _ad!),
+          ),
+        ),
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.tts.stop();
+    _ad?.dispose();
   }
 }
