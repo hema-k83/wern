@@ -224,6 +224,7 @@ class _MyListScreenState extends State<MyListScreen> {
                 key: _wordForm,
                 child: TextFormField(
                   controller: wordController,
+                  textCapitalization: TextCapitalization.characters,
                   decoration: InputDecoration(
                     hint: Text(
                       "Enter Word in English",
