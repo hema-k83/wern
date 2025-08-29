@@ -66,9 +66,6 @@ class Data {
     "SHOP",
     "SCHOOL",
     "TEMPLE",
-    "THERE",
-    "HERE",
-    "WHERE",
     "OFFICE",
   ];
   static final List<String> people = [
@@ -76,17 +73,11 @@ class Data {
     "DAD",
     "GIRL",
     "KID",
-    "SHE",
     "MAN",
-    "ME",
     "MOM",
     "PAL",
     "TEACHER",
-    "THEM",
-    "THEY",
-    "WE",
     "WOMAN",
-    "YOU",
   ];
   static final List<String> numbers = [
     "ONE",
