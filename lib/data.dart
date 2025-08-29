@@ -7,7 +7,7 @@ class Data {
     "EAR",
     "FAN",
     "GAME",
-    "HUT",
+    "HELP",
     "INK",
     "JAR",
     "KITE",
@@ -16,7 +16,7 @@ class Data {
     "NET",
     "OWL",
     "PEN",
-    "QUIZ",
+    "QUICK",
     "ROW",
     "SUN",
     "TRUNK",
@@ -35,6 +35,7 @@ class Data {
     "MANGO",
     "ORANGE",
     "PAPAYA",
+    "PINEAPPLE",
   ];
   static final List<String> colors = [
     "AQUA",
@@ -74,7 +75,6 @@ class Data {
     "BOY",
     "DAD",
     "GIRL",
-    "HE",
     "KID",
     "SHE",
     "MAN",
@@ -84,9 +84,7 @@ class Data {
     "TEACHER",
     "THEM",
     "THEY",
-    "US",
     "WE",
-    "WHO",
     "WOMAN",
     "YOU",
   ];
