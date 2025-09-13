@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wern/analytics.dart';
 import 'package:wern/my_list_screen.dart';
 import 'package:wern/custom_tts.dart';
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return data;
     });
     getCategoriesData();
-    _initGoogleMobileAds();
+    //_initGoogleMobileAds();
   }
 
   void getCategoriesData() {
@@ -108,13 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (width < 900) {
       return 3; // landscape phones / small tablets
     } else {
-      return 4; // big tablets / desktops
+      return 5; // big tablets / desktops
     }
   }
 
-  Future<InitializationStatus> _initGoogleMobileAds() {
-    return MobileAds.instance.initialize();
-  }
+  // Future<InitializationStatus> _initGoogleMobileAds() {
+  //   return MobileAds.instance.initialize();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -162,8 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
               replacement: ShowInstructions(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 20,
-                  horizontal: 20,
+                  vertical: 60,
+                  horizontal: 60,
                 ),
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -228,8 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: const Icon(Icons.create_rounded, color: Colors.white),
         ),
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
