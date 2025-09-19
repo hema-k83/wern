@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-//import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wern/analytics.dart';
 import 'package:wern/custom_tts.dart';
 
-//import 'ad_helper.dart';
 import 'data.dart';
 
 class LearnScreen extends StatefulWidget {
@@ -22,31 +20,11 @@ class _LearnScreenState extends State<LearnScreen> {
   int readingIndex = -1;
   PageController pageController = PageController();
   int currentPage = 0;
-  //BannerAd? _ad;
 
   @override
   void initState() {
     super.initState();
     Analytics.logPageView("learning_screen", widget.category);
-
-    // TODO: Load a banner ad
-    // BannerAd(
-    //   adUnitId: AdHelper.bannerAdUnitId,
-    //   size: AdSize.banner,
-    //   request: AdRequest(),
-    //   listener: BannerAdListener(
-    //     onAdLoaded: (ad) {
-    //       setState(() {
-    //         _ad = ad as BannerAd;
-    //       });
-    //     },
-    //     onAdFailedToLoad: (ad, error) {
-    //       // Releases an ad resource when it fails to load
-    //       ad.dispose();
-    //       print('Ad load failed (code=${error.code} message=${error.message})');
-    //     },
-    //   ),
-    // ).load();
   }
 
   getTextSize(shortestSide) {
@@ -62,6 +40,7 @@ class _LearnScreenState extends State<LearnScreen> {
   @override
   Widget build(BuildContext context) {
     final categoryData = Data.getData(widget.category);
+    final categoryVisualData = Data.getVisualData(widget.category);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     double shorterSide = MediaQuery.of(context).size.shortestSide;
@@ -183,6 +162,52 @@ class _LearnScreenState extends State<LearnScreen> {
                                     .toList(),
                               ),
                             ),
+                            widget.category == "Colors"
+                                ? Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Container(
+                                      height: height * 0.05,
+                                      width: width * 0.1,
+
+                                      decoration: widget.category == "Colors"
+                                          ? BoxDecoration(
+                                              color:
+                                                  categoryVisualData[wordEntry
+                                                      .key],
+                                              border: Border.all(
+                                                color: Colors.black,
+                                                width: 2,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                  )
+                                : SizedBox(),
+                            widget.category == "Numbers"
+                                ? Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Container(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          categoryVisualData[wordEntry.key],
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),
                             Padding(
                               padding: EdgeInsets.only(bottom: height * 0.05),
                               child: Align(
