@@ -29,11 +29,11 @@ class _LearnScreenState extends State<LearnScreen> {
 
   getTextSize(shortestSide) {
     if (shortestSide < 400) {
-      return 0.10;
-    } else if (shortestSide < 600) {
       return 0.12;
-    } else {
+    } else if (shortestSide < 600) {
       return 0.14;
+    } else {
+      return 0.10;
     }
   }
 
@@ -49,6 +49,9 @@ class _LearnScreenState extends State<LearnScreen> {
     double textSizeSmall = textSize * shorterSide;
     double textSizeLarge = textSizeSmall * 1.2;
     double iconSize = 60;
+    print(
+      " Text size for ${shorterSide} textSize is ${textSize} textSizeSmall is ${textSizeSmall} and textSizeLarge is ${textSizeLarge}",
+    );
 
     return Scaffold(
       backgroundColor: Color(0xFFBBDCE5),
@@ -185,7 +188,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                 : SizedBox(),
                             widget.category == "Numbers"
                                 ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    padding: const EdgeInsets.all(10.0),
                                     child: Container(
                                       height: 30,
                                       width: 30,
