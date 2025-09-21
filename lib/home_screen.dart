@@ -218,6 +218,26 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
+      bottomNavigationBar: SizedBox(
+        height: 75,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 18.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Text("\u00A9 2025 Wern. All rights reserved.")],
+              ),
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Text("Email us at devcdr1 [at] gmail [dot] com")],
+              ),
+            ],
+          ),
+        ),
+      ),
       floatingActionButton: Visibility(
         visible: canCreateList,
         child: FloatingActionButton(

@@ -102,7 +102,7 @@ class _LearnScreenState extends State<LearnScreen> {
                   onPressed: () {
                     if (!isReading) {
                       pageController.previousPage(
-                        duration: Duration(seconds: 1),
+                        duration: Duration(milliseconds: 1),
                         curve: Curves.easeInOut,
                       );
                     }
@@ -237,9 +237,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                 alignment: Alignment.bottomCenter,
                                 child: IconButton(
                                   onPressed: () async {
-                                    setState(() {
-                                      isReading = !isReading;
-                                    });
+                                    isReading = !isReading;
                                     if (isReading) {
                                       readingIndex = 0;
                                       var chars = wordEntry.value.characters
@@ -256,9 +254,6 @@ class _LearnScreenState extends State<LearnScreen> {
                                         ); //Need these for Characters to scale up/down in sequence properly
                                         await widget.tts.speak(
                                           chars[readingIndex],
-                                        );
-                                        await Future.delayed(
-                                          Duration(milliseconds: 2),
                                         );
                                         setState(
                                           //Don't delete
@@ -304,7 +299,7 @@ class _LearnScreenState extends State<LearnScreen> {
                   onPressed: () {
                     if (!isReading) {
                       pageController.nextPage(
-                        duration: Duration(seconds: 1),
+                        duration: Duration(milliseconds: 1),
                         curve: Curves.easeInOut,
                       );
                     }
@@ -326,6 +321,7 @@ class _LearnScreenState extends State<LearnScreen> {
   @override
   void dispose() {
     super.dispose();
+    pageController.dispose();
     widget.tts.stop();
   }
 }
