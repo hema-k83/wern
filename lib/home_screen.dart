@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wern/analytics.dart';
 import 'package:wern/my_list_screen.dart';
@@ -112,9 +113,24 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Future<InitializationStatus> _initGoogleMobileAds() {
-  //   return MobileAds.instance.initialize();
-  // }
+  Future<void> _launchUrl() async {
+    // Replace with your actual domain
+    final Uri _url = Uri.parse('https://wern.space/policy.html');
+
+    if (!await launchUrl(_url)) {
+      // Handle the case where the URL couldn't be launched
+      throw Exception('Could not launch $_url');
+    }
+  }
+
+  Future<void> _launchAppUrl() async {
+    final Uri url = Uri.parse(
+      'https://play.google.com/store/apps/details?id=com.rua.wern.wern',
+    );
+    if (!await launchUrl(url)) {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,20 +235,39 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       bottomNavigationBar: SizedBox(
-        height: 75,
+        height: 130,
         child: Padding(
           padding: const EdgeInsets.only(bottom: 18.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text("\u00A9 2025 Wern. All rights reserved.")],
+                children: [
+                  Text("\u00A9 2025 Wern. All rights reserved."),
+                  SizedBox(width: 5),
+                  TextButton(
+                    onPressed: _launchUrl,
+                    child: const Text('Privacy Policy'),
+                  ),
+                ],
               ),
-              SizedBox(height: 5),
+              // SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text("Email us at devcdr1 [at] gmail [dot] com")],
+                children: [
+                  Text("Email us at devcdr1 [at] gmail [dot] com"),
+                  TextButton(
+                    onPressed: _launchAppUrl,
+                    child: Image.asset(
+                      'images/play_badge.png',
+                      width: 150, // You can adjust the width as needed
+                      height: 70, // You can adjust the height as needed
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -240,7 +275,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: Visibility(
         visible: canCreateList,
+
         child: FloatingActionButton(
+          tooltip: "Create List",
           onPressed: () {
             onAddWords();
           },
