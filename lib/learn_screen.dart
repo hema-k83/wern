@@ -31,9 +31,29 @@ class _LearnScreenState extends State<LearnScreen> {
     if (shortestSide < 400) {
       return 0.12;
     } else if (shortestSide < 600) {
-      return 0.14;
+      return 0.06;
     } else {
-      return 0.10;
+      return 0.09;
+    }
+  }
+
+  getHeight(shortestSide) {
+    if (shortestSide < 400) {
+      return 0.6;
+    } else if (shortestSide < 600) {
+      return 0.4;
+    } else {
+      return 0.6;
+    }
+  }
+
+  getWidth(shortestSide) {
+    if (shortestSide < 400) {
+      return 0.6;
+    } else if (shortestSide < 600) {
+      return 0.5;
+    } else {
+      return 0.6;
     }
   }
 
@@ -41,9 +61,9 @@ class _LearnScreenState extends State<LearnScreen> {
   Widget build(BuildContext context) {
     final categoryData = Data.getData(widget.category);
     final categoryVisualData = Data.getVisualData(widget.category);
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     double shorterSide = MediaQuery.of(context).size.shortestSide;
+    double height = MediaQuery.of(context).size.height * getHeight(shorterSide);
+    double width = MediaQuery.of(context).size.width * getWidth(shorterSide);
 
     double textSize = getTextSize(shorterSide);
     double textSizeSmall = textSize * shorterSide;
@@ -96,8 +116,8 @@ class _LearnScreenState extends State<LearnScreen> {
               ),
             ),
             SizedBox(
-              height: height * 0.7,
-              width: width * 0.7,
+              height: height,
+              width: width,
               child: PageView(
                 controller: pageController,
                 physics: isReading
@@ -300,18 +320,6 @@ class _LearnScreenState extends State<LearnScreen> {
           ],
         ),
       ),
-      // bottomNavigationBar: Visibility(
-      //   visible: (_ad != null),
-      //   child: Padding(
-      //     padding: const EdgeInsets.only(bottom: 40.0),
-      //     child: Container(
-      //       width: _ad?.size.width.toDouble() ?? 0,
-      //       height: 72.0,
-      //       alignment: Alignment.center,
-      //       child: _ad == null ? const SizedBox() : AdWidget(ad: _ad!),
-      //     ),
-      //   ),
-      // ),
     );
   }
 
@@ -319,6 +327,5 @@ class _LearnScreenState extends State<LearnScreen> {
   void dispose() {
     super.dispose();
     widget.tts.stop();
-    //_ad?.dispose();
   }
 }
