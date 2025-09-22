@@ -12,6 +12,10 @@ class CustomTTS {
   Future<bool> initTTS() async {
     flutterTts = FlutterTts();
     _setAwaitOptions();
+    if (kIsWeb) {
+      setConfig();
+      return true;
+    }
     if (!kIsWeb && Platform.isAndroid) {
       //isAndroid check {
       var engine = await _getDefaultEngine();
@@ -22,13 +26,17 @@ class CustomTTS {
           language,
         );
         if (isLanguageAvailable) {
-          flutterTts.setLanguage(language);
-          flutterTts.setSpeechRate(0.2);
+          setConfig();
           return true;
         }
       }
     }
     return false;
+  }
+
+  void setConfig() {
+    flutterTts.setLanguage(language);
+    flutterTts.setSpeechRate(0.5);
   }
 
   Future<bool> _getDefaultEngine() async {

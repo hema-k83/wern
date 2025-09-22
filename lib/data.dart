@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
 class Data {
   static final List<String> general = [
     "ANT",
@@ -38,7 +42,6 @@ class Data {
     "PINEAPPLE",
   ];
   static final List<String> colors = [
-    "AQUA",
     "BLACK",
     "BLUE",
     "BROWN",
@@ -49,9 +52,19 @@ class Data {
     "WHITE",
     "YELLOW",
   ];
+  static final List<Color> colors_v = [
+    Colors.black,
+    Colors.blue,
+    Colors.brown,
+    Colors.green,
+    Colors.orange,
+    Colors.red,
+    Colors.purple,
+    Colors.white,
+    Colors.yellow,
+  ];
   static final List<String> vegetables = [
     "BEETROOT",
-    "BRINJAL",
     "CABBAGE",
     "CARROT",
     "CUCUMBER",
@@ -80,6 +93,7 @@ class Data {
     "WOMAN",
   ];
   static final List<String> numbers = [
+    "ZERO",
     "ONE",
     "TWO",
     "THREE",
@@ -101,6 +115,29 @@ class Data {
     "HUNDRED",
   ];
 
+  static final List<String> numbers_v = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "20",
+    "30",
+    "40",
+    "50",
+    "60",
+    "70",
+    "80",
+    "90",
+    "100",
+  ];
+
   static getData(String category) {
     switch (category) {
       case "General":
@@ -119,6 +156,20 @@ class Data {
         return numbers;
       default:
         return myList;
+    }
+  }
+
+  static getVisualData(String category) {
+    switch (category) {
+      case "Colors":
+        print("Sending lenght${colors_v.length}");
+        return colors_v;
+      case "Numbers":
+        print("Sending lenght${numbers_v.length}");
+        return numbers_v;
+      default:
+        print("Sending lenght 0");
+        return [];
     }
   }
 
