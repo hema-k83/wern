@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: const Icon(Icons.create_rounded, color: Colors.white),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
