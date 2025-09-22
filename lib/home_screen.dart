@@ -21,6 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<bool>? isLanguageSupported;
   late CustomTTS tts;
   bool canCreateList = false;
+  String policyUrl = 'https://wern.space/policy.html';
+  String playStroreUrl =
+      'https://play.google.com/store/apps/details?id=com.rua.wern.wern';
 
   final List<String> categories = [
     "General",
@@ -58,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
       return data;
     });
     getCategoriesData();
-    //_initGoogleMobileAds();
   }
 
   void getCategoriesData() {
@@ -113,28 +115,37 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _launchUrl() async {
-    // Replace with your actual domain
-    final Uri _url = Uri.parse('https://wern.space/policy.html');
+  Future<void> _launchUrl(String urlLink) async {
+    final Uri url = Uri.parse(urlLink);
 
-    if (!await launchUrl(_url)) {
-      // Handle the case where the URL couldn't be launched
-      throw Exception('Could not launch $_url');
+    try {
+      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+        throw 'Could not launch $url';
+      }
+    } catch (e) {
+      // Show an error message if the URL could not be launched.
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error launching URL: $e')));
+      print('Error launching URL: $e');
     }
   }
 
-  Future<void> _launchAppUrl() async {
-    final Uri url = Uri.parse(
-      'https://play.google.com/store/apps/details?id=com.rua.wern.wern',
-    );
-    if (!await launchUrl(url)) {
-      throw 'Could not launch $url';
+  getTextSize(shortestSide) {
+    if (shortestSide < 400) {
+      return 0.04;
+    } else if (shortestSide < 600) {
+      return 0.04;
+    } else {
+      return 0.03;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double shorterSide = MediaQuery.of(context).size.shortestSide;
+    double textSize = getTextSize(shorterSide) * shorterSide;
     int crossAxisCount = getColumnCount(width);
     return Scaffold(
       backgroundColor: Color(primaryVariant),
@@ -177,9 +188,11 @@ class _HomeScreenState extends State<HomeScreen> {
               visible: asyncSnapshot.data!,
               replacement: ShowInstructions(),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 60,
-                  horizontal: 60,
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  left: 60,
+                  right: 60,
+                  bottom: 5,
                 ),
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -207,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                   color: Color(0xFF111827),
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                                  fontSize: textSize,
                                 ),
                               ),
                             ),
@@ -237,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: SizedBox(
         height: 130,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 18.0),
+          padding: const EdgeInsets.only(bottom: 5.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             // crossAxisAlignment: CrossAxisAlignment.center,
@@ -245,11 +258,17 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("\u00A9 2025 Wern. All rights reserved."),
+                  Text(
+                    "\u00A9 2025 Wern. All rights reserved.",
+                    style: TextStyle(fontSize: textSize * 0.7),
+                  ),
                   SizedBox(width: 5),
                   TextButton(
-                    onPressed: _launchUrl,
-                    child: const Text('Privacy Policy'),
+                    onPressed: () => _launchUrl(policyUrl),
+                    child: Text(
+                      'Privacy Policy',
+                      style: TextStyle(fontSize: textSize * 0.7),
+                    ),
                   ),
                 ],
               ),
@@ -257,9 +276,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Email us at devcdr1 [at] gmail [dot] com"),
+                  //Text("Email us at devcdr1 [at] gmail [dot] com"),
                   TextButton(
-                    onPressed: _launchAppUrl,
+                    onPressed: () => _launchUrl(playStroreUrl),
                     child: Image.asset(
                       'images/play_badge.png',
                       width: 150, // You can adjust the width as needed

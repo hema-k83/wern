@@ -29,7 +29,7 @@ class _LearnScreenState extends State<LearnScreen> {
 
   getTextSize(shortestSide) {
     if (shortestSide < 400) {
-      return 0.12;
+      return 0.039;
     } else if (shortestSide < 600) {
       return 0.06;
     } else {
@@ -37,9 +37,19 @@ class _LearnScreenState extends State<LearnScreen> {
     }
   }
 
+  getTextSizeForInfo(shortestSide) {
+    if (shortestSide < 400) {
+      return 10;
+    } else if (shortestSide < 600) {
+      return 12;
+    } else {
+      return 16;
+    }
+  }
+
   getHeight(shortestSide) {
     if (shortestSide < 400) {
-      return 0.6;
+      return 0.35;
     } else if (shortestSide < 600) {
       return 0.4;
     } else {
@@ -49,11 +59,21 @@ class _LearnScreenState extends State<LearnScreen> {
 
   getWidth(shortestSide) {
     if (shortestSide < 400) {
-      return 0.6;
+      return 0.55;
     } else if (shortestSide < 600) {
-      return 0.5;
+      return 0.55;
     } else {
-      return 0.6;
+      return 0.65;
+    }
+  }
+
+  getIconSize(shortestSide) {
+    if (shortestSide < 400) {
+      return 25;
+    } else if (shortestSide < 600) {
+      return 35;
+    } else {
+      return 50;
     }
   }
 
@@ -61,16 +81,18 @@ class _LearnScreenState extends State<LearnScreen> {
   Widget build(BuildContext context) {
     final categoryData = Data.getData(widget.category);
     final categoryVisualData = Data.getVisualData(widget.category);
-    double shorterSide = MediaQuery.of(context).size.shortestSide;
-    double height = MediaQuery.of(context).size.height * getHeight(shorterSide);
-    double width = MediaQuery.of(context).size.width * getWidth(shorterSide);
+    double shortestSide = MediaQuery.of(context).size.shortestSide;
+    double height =
+        MediaQuery.of(context).size.height * getHeight(shortestSide);
+    double width = MediaQuery.of(context).size.width * getWidth(shortestSide);
 
-    double textSize = getTextSize(shorterSide);
-    double textSizeSmall = textSize * shorterSide;
+    double textSize = getTextSize(shortestSide);
+    double textSizeSmall = textSize * shortestSide;
     double textSizeLarge = textSizeSmall * 1.2;
-    double iconSize = 60;
+    double textSizeOther = getTextSizeForInfo(shortestSide);
+    double iconSize = getIconSize(shortestSide);
     print(
-      " Text size for ${shorterSide} textSize is ${textSize} textSizeSmall is ${textSizeSmall} and textSizeLarge is ${textSizeLarge}",
+      " Text size for ${shortestSide} textSize is ${textSize} textSizeSmall is ${textSizeSmall} and textSizeLarge is ${textSizeLarge}",
     );
 
     return Scaffold(
@@ -110,7 +132,7 @@ class _LearnScreenState extends State<LearnScreen> {
                   icon: Icon(
                     Icons.arrow_back_sharp,
                     color: Colors.indigo,
-                    size: 50,
+                    size: iconSize,
                   ),
                 ),
               ),
@@ -153,7 +175,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                   "${wordEntry.key + 1} of ${categoryData.length}",
                                   style: TextStyle(
                                     color: Colors.brown,
-                                    fontSize: 16,
+                                    fontSize: textSizeOther,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -211,7 +233,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                     padding: const EdgeInsets.all(10.0),
                                     child: Container(
                                       height: 30,
-                                      width: 30,
+                                      width: 40,
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                           color: Colors.black,
@@ -224,7 +246,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                            fontSize: textSizeOther * 1.2,
                                           ),
                                         ),
                                       ),
@@ -278,7 +300,7 @@ class _LearnScreenState extends State<LearnScreen> {
                                     color: isReading
                                         ? Colors.red
                                         : Color(0xFF06923E),
-                                    size: iconSize,
+                                    size: iconSize + 10,
                                   ),
                                 ),
                               ),
@@ -307,7 +329,7 @@ class _LearnScreenState extends State<LearnScreen> {
                   icon: Icon(
                     Icons.arrow_forward_sharp,
                     color: Colors.indigo,
-                    size: 50,
+                    size: iconSize,
                   ),
                 ),
               ),

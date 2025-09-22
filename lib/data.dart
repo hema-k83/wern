@@ -65,7 +65,6 @@ class Data {
   ];
   static final List<String> vegetables = [
     "BEETROOT",
-    "BRINJAL",
     "CABBAGE",
     "CARROT",
     "CUCUMBER",
