@@ -151,72 +151,74 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: FutureBuilder(
-        future: isLanguageSupported,
-        builder: (context, asyncSnapshot) {
-          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (asyncSnapshot.hasData) {
-            return Visibility(
-              visible: asyncSnapshot.data!,
-              replacement: ShowInstructions(),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 20,
-                  horizontal: 20,
-                ),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 30,
-                    mainAxisSpacing: 20,
+      body: SafeArea(
+        child: FutureBuilder(
+          future: isLanguageSupported,
+          builder: (context, asyncSnapshot) {
+            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (asyncSnapshot.hasData) {
+              return Visibility(
+                visible: asyncSnapshot.data!,
+                replacement: ShowInstructions(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
                   ),
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      child: Card(
-                        elevation: 8.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        color: Color(secondary),
-                        shadowColor: Colors.grey.shade700,
-                        child: Column(
-                          children: [
-                            Expanded(child: Image.asset(getImageName(index))),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 20.0),
-                              child: Text(
-                                categories[index],
-                                style: TextStyle(
-                                  color: Color(0xFF111827),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 30,
+                      mainAxisSpacing: 20,
+                    ),
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        child: Card(
+                          elevation: 8.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          color: Color(secondary),
+                          shadowColor: Colors.grey.shade700,
+                          child: Column(
+                            children: [
+                              Expanded(child: Image.asset(getImageName(index))),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 20.0),
+                                child: Text(
+                                  categories[index],
+                                  style: TextStyle(
+                                    color: Color(0xFF111827),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) => LearnScreen(
-                              category: categories[index],
-                              tts: tts,
-                            ),
+                            ],
                           ),
-                        );
-                      },
-                    );
-                  },
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => LearnScreen(
+                                category: categories[index],
+                                tts: tts,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return ShowInstructions();
-          }
-        },
+              );
+            } else {
+              return ShowInstructions();
+            }
+          },
+        ),
       ),
       floatingActionButton: Visibility(
         visible: canCreateList,

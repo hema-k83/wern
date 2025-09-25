@@ -86,237 +86,245 @@ class _LearnScreenState extends State<LearnScreen> {
         ),
         foregroundColor: Colors.white,
       ),
-      body: Align(
-        alignment: Alignment.center,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 1.0),
-              child: Visibility(
-                visible: currentPage > 0,
-                replacement: SizedBox(width: 20),
-                child: IconButton(
-                  onPressed: () {
-                    if (!isReading) {
-                      pageController.previousPage(
-                        duration: Duration(milliseconds: 1),
-                        curve: Curves.easeInOut,
-                      );
-                    }
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_sharp,
-                    color: Colors.indigo,
-                    size: iconSize,
+      body: SafeArea(
+        child: Align(
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 1.0),
+                child: Visibility(
+                  visible: currentPage > 0,
+                  replacement: SizedBox(width: 20),
+                  child: IconButton(
+                    onPressed: () {
+                      if (!isReading) {
+                        pageController.previousPage(
+                          duration: Duration(milliseconds: 1),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_sharp,
+                      color: Colors.indigo,
+                      size: iconSize,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: height * 0.4,
-              width: width * 0.7,
-              child: PageView(
-                controller: pageController,
-                physics: isReading
-                    ? NeverScrollableScrollPhysics()
-                    : BouncingScrollPhysics(),
-                onPageChanged: (val) {
-                  setState(() {
-                    currentPage = val;
-                  });
-                },
-                children: categoryData
-                    .asMap()
-                    .entries
-                    .map<Widget>(
-                      (MapEntry<int, String> wordEntry) => Card(
-                        color: Color(0xFFF8FAFB),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        shadowColor: Colors.grey.shade700,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 20,
-                                  top: 15,
-                                ),
-                                child: Text(
-                                  "${wordEntry.key + 1} of ${categoryData.length}",
-                                  style: TextStyle(
-                                    color: Colors.brown,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+              SizedBox(
+                height: height * 0.4,
+                width: width * 0.7,
+                child: PageView(
+                  controller: pageController,
+                  physics: isReading
+                      ? NeverScrollableScrollPhysics()
+                      : BouncingScrollPhysics(),
+                  onPageChanged: (val) {
+                    setState(() {
+                      currentPage = val;
+                    });
+                  },
+                  children: categoryData
+                      .asMap()
+                      .entries
+                      .map<Widget>(
+                        (MapEntry<int, String> wordEntry) => Card(
+                          color: Color(0xFFF8FAFB),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          shadowColor: Colors.grey.shade700,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 20,
+                                    top: 15,
+                                  ),
+                                  child: Text(
+                                    "${wordEntry.key + 1} of ${categoryData.length}",
+                                    style: TextStyle(
+                                      color: Colors.brown,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: wordEntry.value.characters
-                                    .toList()
-                                    .asMap()
-                                    .entries
-                                    .map<Widget>((MapEntry<int, String> entry) {
-                                      final int index = entry.key;
-                                      final String char = entry.value;
-                                      return Text(
-                                        char,
-                                        style: GoogleFonts.ramabhadra(
-                                          color: readingIndex == index
-                                              ? Colors.red
-                                              : Color(0xFF1A237E),
-                                          fontSize: (readingIndex == index
-                                              ? textSizeLarge
-                                              : textSizeSmall),
-                                          letterSpacing: 7.0,
-                                        ),
-                                      );
-                                    })
-                                    .toList(),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: wordEntry.value.characters
+                                      .toList()
+                                      .asMap()
+                                      .entries
+                                      .map<Widget>((
+                                        MapEntry<int, String> entry,
+                                      ) {
+                                        final int index = entry.key;
+                                        final String char = entry.value;
+                                        return Text(
+                                          char,
+                                          style: GoogleFonts.ramabhadra(
+                                            color: readingIndex == index
+                                                ? Colors.red
+                                                : Color(0xFF1A237E),
+                                            fontSize: (readingIndex == index
+                                                ? textSizeLarge
+                                                : textSizeSmall),
+                                            letterSpacing: 7.0,
+                                          ),
+                                        );
+                                      })
+                                      .toList(),
+                                ),
                               ),
-                            ),
-                            widget.category == "Colors"
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Container(
-                                      height: height * 0.05,
-                                      width: width * 0.2,
-
-                                      decoration: widget.category == "Colors"
-                                          ? BoxDecoration(
-                                              color:
-                                                  categoryVisualData[wordEntry
-                                                      .key],
-                                              border: Border.all(
-                                                color: Colors.black,
-                                                width: 2,
-                                              ),
-                                            )
-                                          : null,
-                                    ),
-                                  )
-                                : SizedBox(),
-                            widget.category == "Numbers"
-                                ? Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Container(
-                                      height: 30,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black,
-                                          width: 2,
-                                        ),
+                              widget.category == "Colors"
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 8.0,
                                       ),
-                                      child: Center(
-                                        child: Text(
-                                          categoryVisualData[wordEntry.key],
-                                          style: TextStyle(
+                                      child: Container(
+                                        height: height * 0.05,
+                                        width: width * 0.2,
+
+                                        decoration: widget.category == "Colors"
+                                            ? BoxDecoration(
+                                                color:
+                                                    categoryVisualData[wordEntry
+                                                        .key],
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 2,
+                                                ),
+                                              )
+                                            : null,
+                                      ),
+                                    )
+                                  : SizedBox(),
+                              widget.category == "Numbers"
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Container(
+                                        height: 30,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
                                             color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            categoryVisualData[wordEntry.key],
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  )
-                                : SizedBox(),
+                                    )
+                                  : SizedBox(),
 
-                            Padding(
-                              padding: EdgeInsets.only(bottom: height * 0.05),
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    setState(() {
-                                      isReading = !isReading;
-                                    });
-                                    if (isReading) {
-                                      readingIndex = 0;
-                                      var chars = wordEntry.value.characters
-                                          .toList();
-                                      for (
-                                        readingIndex = 0;
-                                        readingIndex < chars.length;
-                                        readingIndex++
-                                      ) {
-                                        if (!isReading) break;
-                                        setState(
-                                          //Don't delete
-                                          () {},
-                                        ); //Need these for Characters to scale up/down in sequence properly
-                                        await widget.tts.speak(
-                                          chars[readingIndex],
-                                        );
-                                        await Future.delayed(
-                                          Duration(milliseconds: 20),
-                                        );
-                                        setState(
-                                          //Don't delete
-                                          () {},
-                                        ); //Need these for last Character to scale down in sequence properly
-                                      }
+                              Padding(
+                                padding: EdgeInsets.only(bottom: height * 0.05),
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      setState(() {
+                                        isReading = !isReading;
+                                      });
                                       if (isReading) {
-                                        await widget.tts.speak(wordEntry.value);
-                                      } //Reading entire word here
-                                      setState(() {
-                                        isReading = false;
-                                        readingIndex = -1;
-                                      });
-                                    } else {
-                                      setState(() {
-                                        readingIndex = -1;
-                                      });
-                                    }
-                                  },
-                                  icon: Icon(
-                                    isReading ? Icons.stop : Icons.play_arrow,
-                                    color: isReading
-                                        ? Colors.red
-                                        : Color(0xFF06923E),
-                                    size: iconSize + 10,
+                                        readingIndex = 0;
+                                        var chars = wordEntry.value.characters
+                                            .toList();
+                                        for (
+                                          readingIndex = 0;
+                                          readingIndex < chars.length;
+                                          readingIndex++
+                                        ) {
+                                          if (!isReading) break;
+                                          setState(
+                                            //Don't delete
+                                            () {},
+                                          ); //Need these for Characters to scale up/down in sequence properly
+                                          await widget.tts.speak(
+                                            chars[readingIndex],
+                                          );
+                                          await Future.delayed(
+                                            Duration(milliseconds: 20),
+                                          );
+                                          setState(
+                                            //Don't delete
+                                            () {},
+                                          ); //Need these for last Character to scale down in sequence properly
+                                        }
+                                        if (isReading) {
+                                          await widget.tts.speak(
+                                            wordEntry.value,
+                                          );
+                                        } //Reading entire word here
+                                        setState(() {
+                                          isReading = false;
+                                          readingIndex = -1;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          readingIndex = -1;
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(
+                                      isReading ? Icons.stop : Icons.play_arrow,
+                                      color: isReading
+                                          ? Colors.red
+                                          : Color(0xFF06923E),
+                                      size: iconSize + 10,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                    .toList(),
+                      )
+                      .toList(),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 1.0),
-              child: Visibility(
-                visible: currentPage < (categoryData.length - 1),
-                replacement: SizedBox(width: 20),
-                child: IconButton(
-                  onPressed: () {
-                    if (!isReading) {
-                      pageController.nextPage(
-                        duration: Duration(milliseconds: 1),
-                        curve: Curves.easeInOut,
-                      );
-                    }
-                  },
-                  icon: Icon(
-                    Icons.arrow_forward_sharp,
-                    color: Colors.indigo,
-                    size: iconSize,
+              Padding(
+                padding: const EdgeInsets.only(left: 1.0),
+                child: Visibility(
+                  visible: currentPage < (categoryData.length - 1),
+                  replacement: SizedBox(width: 20),
+                  child: IconButton(
+                    onPressed: () {
+                      if (!isReading) {
+                        pageController.nextPage(
+                          duration: Duration(milliseconds: 1),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                    icon: Icon(
+                      Icons.arrow_forward_sharp,
+                      color: Colors.indigo,
+                      size: iconSize,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Visibility(

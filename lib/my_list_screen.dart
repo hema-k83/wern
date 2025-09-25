@@ -99,289 +99,291 @@ class _MyListScreenState extends State<MyListScreen> {
         //backgroundColor: Colors.blueAccent,
         elevation: 10,
       ),
-      body: PopScope<String>(
-        canPop: false,
-        onPopInvokedWithResult: (didpop, result) async {
-          if (didpop) return;
-          if (!(listName.compareTo(nameController.text) == 0) ||
-              !(listEquality.equals(initialWords, words))) {
-            bool? confirmBackPress = await showDialog<bool>(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) {
-                return AlertDialog(
-                  backgroundColor: Colors.white,
-                  title: const Text(
-                    "Unsaved Changes ?",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  content: const Text(
-                    "Do you really want to go back without saving ?",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, false);
-                      },
-                      child: const Text(
-                        "No",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
+      body: SafeArea(
+        child: PopScope<String>(
+          canPop: false,
+          onPopInvokedWithResult: (didpop, result) async {
+            if (didpop) return;
+            if (!(listName.compareTo(nameController.text) == 0) ||
+                !(listEquality.equals(initialWords, words))) {
+              bool? confirmBackPress = await showDialog<bool>(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: const Text(
+                      "Unsaved Changes ?",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                      child: const Text(
-                        "Yes",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
+                    content: const Text(
+                      "Do you really want to go back without saving ?",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
                       ),
                     ),
-                  ],
-                );
-              },
-            );
-            if (confirmBackPress!) {
-              Navigator.of(context).pop(""); // return result to previous page
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: const Text(
+                          "No",
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: const Text(
+                          "Yes",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+              if (confirmBackPress!) {
+                Navigator.of(context).pop(""); // return result to previous page
+              }
+            } else {
+              Navigator.of(context).pop("");
             }
-          } else {
-            Navigator.of(context).pop("");
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 10,
-            children: [
-              Text(
-                "List Name",
-                style: TextStyle(
-                  color: Colors.brown,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              Form(
-                key: _nameForm,
-                child: TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hint: Text(
-                      "Enter List Name",
-                      style: TextStyle(color: Colors.grey, fontSize: 18),
-                    ),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(color: Colors.grey, width: 2),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Colors.blue, width: 2),
-                    ),
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 10,
+              children: [
+                Text(
+                  "List Name",
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
-                  maxLines: 1,
-                  maxLength: 10,
-                  cursorColor: Colors.black,
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                  validator: (data) {
-                    if (data == null || data.trim().isEmpty) {
-                      return "Enter valid name";
-                    } else {
-                      return null;
-                    }
-                  },
                 ),
-              ),
-
-              Text(
-                "Word",
-                style: TextStyle(
-                  color: Colors.brown,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              Form(
-                key: _wordForm,
-                child: TextFormField(
-                  controller: wordController,
-                  textCapitalization: TextCapitalization.characters,
-                  decoration: InputDecoration(
-                    hint: Text(
-                      "Enter Word in English",
-                      style: TextStyle(color: Colors.grey, fontSize: 18),
+                Form(
+                  key: _nameForm,
+                  child: TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      hint: Text(
+                        "Enter List Name",
+                        style: TextStyle(color: Colors.grey, fontSize: 18),
+                      ),
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: Colors.grey, width: 2),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.blue, width: 2),
+                      ),
                     ),
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(color: Colors.grey, width: 2),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Colors.blue, width: 2),
-                    ),
-                  ),
-                  maxLines: 1,
-                  maxLength: 7,
-                  cursorColor: Colors.black,
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                  validator: (data) {
-                    if (data != null || data!.trim().isNotEmpty) {
-                      RegExp exp = RegExp(langRegex);
-                      if (exp.hasMatch(data)) {
+                    maxLines: 1,
+                    maxLength: 10,
+                    cursorColor: Colors.black,
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    validator: (data) {
+                      if (data == null || data.trim().isEmpty) {
+                        return "Enter valid name";
+                      } else {
                         return null;
                       }
-                    }
-                    return "Enter valid word";
-                  },
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Center(
-                  child: ElevatedButton(
-                    style: buttonStyle,
-                    onPressed: words.length < maxWords
-                        ? () {
-                            if (!_nameForm.currentState!.validate() ||
-                                !_wordForm.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Enter valid Data',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            } else {
-                              FocusScope.of(context).unfocus();
-                              setState(() {
-                                words.insert(0, wordController.text.trim());
-                                wordController.text = "";
-                              });
-                              if (words.length == maxWords) {
+
+                Text(
+                  "Word",
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                Form(
+                  key: _wordForm,
+                  child: TextFormField(
+                    controller: wordController,
+                    textCapitalization: TextCapitalization.characters,
+                    decoration: InputDecoration(
+                      hint: Text(
+                        "Enter Word in English",
+                        style: TextStyle(color: Colors.grey, fontSize: 18),
+                      ),
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: Colors.grey, width: 2),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.blue, width: 2),
+                      ),
+                    ),
+                    maxLines: 1,
+                    maxLength: 7,
+                    cursorColor: Colors.black,
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    validator: (data) {
+                      if (data != null || data!.trim().isNotEmpty) {
+                        RegExp exp = RegExp(langRegex);
+                        if (exp.hasMatch(data)) {
+                          return null;
+                        }
+                      }
+                      return "Enter valid word";
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      style: buttonStyle,
+                      onPressed: words.length < maxWords
+                          ? () {
+                              if (!_nameForm.currentState!.validate() ||
+                                  !_wordForm.currentState!.validate()) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
-                                      'You have reached maximum number of words limit',
+                                      'Enter valid Data',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
                                       ),
                                     ),
-                                    backgroundColor: Colors.black,
+                                    backgroundColor: Colors.red,
                                   ),
                                 );
+                              } else {
+                                FocusScope.of(context).unfocus();
+                                setState(() {
+                                  words.insert(0, wordController.text.trim());
+                                  wordController.text = "";
+                                });
+                                if (words.length == maxWords) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'You have reached maximum number of words limit',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.black,
+                                    ),
+                                  );
+                                }
                               }
                             }
-                          }
-                        : null,
-                    child: Text(
-                      "Add Word",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              Divider(color: Colors.grey, height: 10),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: words.length,
-                  shrinkWrap: true,
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Divider(color: Colors.grey, height: 10);
-                  },
-
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Text(
-                        words[index],
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                      ),
-                      trailing: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            words.remove(words[index]);
-                          });
-                        },
-                        icon: Icon(
-                          Icons.delete_forever_sharp,
-                          color: Colors.red,
+                          : null,
+                      child: Text(
+                        "Add Word",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
-                    );
-                  },
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 50),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (!_nameForm.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Enter valid Data',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                            ),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      } else {
-                        await saveData();
-                        Navigator.pop(context, "change");
-                      }
-                    },
-                    style: buttonStyle.copyWith(
-                      backgroundColor: WidgetStatePropertyAll<Color>(
-                        Colors.green,
-                      ),
                     ),
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                  ),
+                ),
+
+                Divider(color: Colors.grey, height: 10),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: words.length,
+                    shrinkWrap: true,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider(color: Colors.grey, height: 10);
+                    },
+
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        title: Text(
+                          words[index],
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              words.remove(words[index]);
+                            });
+                          },
+                          icon: Icon(
+                            Icons.delete_forever_sharp,
+                            color: Colors.red,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 50),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (!_nameForm.currentState!.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Enter valid Data',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {
+                          await saveData();
+                          Navigator.pop(context, "change");
+                        }
+                      },
+                      style: buttonStyle.copyWith(
+                        backgroundColor: WidgetStatePropertyAll<Color>(
+                          Colors.green,
+                        ),
+                      ),
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
